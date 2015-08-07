@@ -1,9 +1,9 @@
-FROM dockerfile/java:oracle-java8
+FROM java:8
 
-RUN apt-get update -qq && apt-get install -qqy curl
-RUN curl https://get.docker.io/gpg | apt-key add -
-RUN echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list
-RUN apt-get update -qq && apt-get install -qqy iptables ca-certificates lxc git-core lxc-docker
+RUN apt-get update -qq && apt-get install -qqy curl apt-transport-https
+RUN curl https://get.docker.com/gpg | apt-key add -
+RUN echo deb http://get.docker.com/ubuntu docker main > /etc/apt/sources.list.d/docker.list
+RUN apt-get update -qq && apt-get install -qqy iptables ca-certificates lxc git-core lxc-docker zip
 
 RUN mkdir -p /opt/jenkins
 ENV JENKINS_HOME /opt/jenkins/data
@@ -16,7 +16,7 @@ RUN for plugin in chucknorris greenballs scm-api git-client git ws-cleanup param
     do curl -sf -o /opt/plugins/${plugin}.hpi \
        -L $JENKINS_MIRROR/plugins/${plugin}/latest/${plugin}.hpi ; done
 
-RUN curl -o /opt/jolokia-agent.jar http://labs.consol.de/maven/repository/org/jolokia/jolokia-jvm/1.2.3/jolokia-jvm-1.2.3-agent.jar
+RUN curl -o /opt/jolokia-agent.jar https://repo1.maven.org/maven2/org/jolokia/jolokia-jvm/1.3.1/jolokia-jvm-1.3.1-agent.jar
 
 ADD start.sh /opt/start.sh
 
