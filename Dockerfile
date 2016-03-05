@@ -13,7 +13,7 @@ ENV JENKINS_MIRROR http://mirrors.jenkins-ci.org
 RUN mkdir -p /opt/plugins
 RUN curl -sf -o /opt/jenkins/jenkins.war -L $JENKINS_MIRROR/war/latest/jenkins.war
 
-RUN for plugin in chucknorris greenballs scm-api git-client git ws-cleanup parameterized-triggery jquery dashboard-view build-pipeline-plugin config-file-provider parameterized-trigger docker-build-step swarm;\
+RUN for plugin in chucknorris greenballs scm-api git-client git ws-cleanup parameterized-triggery jquery dashboard-view build-pipeline-plugin cloudbees-folder config-file-provider parameterized-trigger docker-commons docker-build-step swarm;\
     do curl -sf -o /opt/plugins/${plugin}.hpi \
        -L $JENKINS_MIRROR/plugins/${plugin}/latest/${plugin}.hpi ; done
 
