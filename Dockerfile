@@ -7,7 +7,7 @@ RUN apt-get update -qq && apt-get install -qqy iptables ca-certificates lxc git-
 RUN curl -sSL https://get.docker.com/ | sh
 
 RUN mkdir -p /opt/jenkins
-ENV JENKINS_HOME /opt/jenkins/data
+ENV JENKINS_HOME /var/jenkins/data
 ENV JENKINS_MIRROR http://mirrors.jenkins-ci.org
 
 RUN mkdir -p /opt/plugins
