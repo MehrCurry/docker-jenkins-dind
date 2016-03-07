@@ -1,0 +1,22 @@
+= Running
+
+```bash
+docker run -d --name jenkins --volumes-from jenkins_data --privileged -v /var/run/docker.sock:/var/run/docker.sock -p 18080:8080 -p 18778:8778 --restart=always gzockoll/jenkins
+```
+
+== Content Security Policy
+Jenkins unterstützt seit einigen Versionen die Context Security Policy. Die
+Defaut Einstellung kollidiert mit dem Maven Site Plugin und dem JavaDoc Plugin.
+
+Daher unterstützt der Container nun die Übergabe von CPS Einstellungen an Jenkins:
+
+[source]
+----
+-e CSP_OPTS="default-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; child-src 'self'; frame-src 'self'; script-src 'self' 'unsafe-inline';"
+----
+
+
+[source]
+----
+docker run -d -e CSP_OPTS="default-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; child-src 'self'; frame-src 'self'; script-src 'self' 'unsafe-inline';" --name jenkins --volumes-from jenkins_data --privileged -v /var/run/docker.sock:/var/run/docker.sock -p 18080:8080 -p 18778:8778 --restart=always gzockoll/jenkins
+----
