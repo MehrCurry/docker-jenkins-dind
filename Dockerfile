@@ -1,10 +1,6 @@
-FROM java:8
+FROM anapsix/alpine-java:8
 
-RUN apt-get update -qq && apt-get install -qqy curl apt-transport-https
-RUN curl https://get.docker.com/gpg | apt-key add -
-RUN echo deb http://get.docker.com/ubuntu docker main > /etc/apt/sources.list.d/docker.list
-RUN apt-get update -qq && apt-get install -qqy iptables ca-certificates lxc git-core zip graphviz
-RUN curl -sSL https://get.docker.com/ | sh
+RUN apk upgrade --update && apk add curl docker
 
 RUN mkdir -p /opt/jenkins
 ENV JENKINS_HOME /var/jenkins/data
