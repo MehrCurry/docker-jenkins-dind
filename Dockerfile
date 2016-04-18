@@ -1,4 +1,4 @@
-FROM java:8
+FROM anapsix/alpine-java:8
 
 RUN mkdir -p /opt/jenkins
 ENV JENKINS_HOME /opt/jenkins/data
