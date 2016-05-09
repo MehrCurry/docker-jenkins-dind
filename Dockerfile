@@ -1,24 +1,22 @@
 FROM anapsix/alpine-java:8
 
-RUN apk upgrade --update && apk add curl docker
+RUN apk --no-cache add --repository http://dl-cdn.alpinelinux.org/alpine/edge/main libseccomp && \
+    apk --no-cache add --repository http://dl-cdn.alpinelinux.org/alpine/edge/community docker curl
 
-RUN mkdir -p /opt/jenkins
-ENV JENKINS_HOME /var/jenkins/data
-ENV JENKINS_MIRROR http://mirrors.jenkins-ci.org
+ENV JENKINS_HOME /opt/jenkins
+ENV JENKINS_MIRROR http://updates.jenkins-ci.org
 
-RUN mkdir -p /opt/plugins
-RUN curl -sf -o /opt/jenkins/jenkins.war -L $JENKINS_MIRROR/war/latest/jenkins.war
+WORKDIR $JENKINS_HOME
 
-RUN for plugin in chucknorris greenballs scm-api git-client git ws-cleanup parameterized-triggery jquery dashboard-view build-pipeline-plugin cloudbees-folder config-file-provider parameterized-trigger docker-commons docker-build-step swarm;\
-    do curl -sf -o /opt/plugins/${plugin}.hpi \
-       -L $JENKINS_MIRROR/plugins/${plugin}/latest/${plugin}.hpi ; done
+RUN mkdir -p $JENKINS_HOME
 
-RUN curl -o /opt/jolokia-agent.jar https://repo1.maven.org/maven2/org/jolokia/jolokia-jvm/1.3.1/jolokia-jvm-1.3.1-agent.jar
+RUN mkdir -p $JENKINS_HOME/plugins; for plugin in chucknorris greenballs scm-api git-client git;\
+    do echo ${plugin} && curl -sf -o $JENKINS_HOME/plugins/${plugin}.hpi \
+       -L $JENKINS_MIRROR/latest/${plugin}.hpi ; done
 
-VOLUME $JENKINS_HOME
+ADD jenkins.war jenkins.war
 
-ADD start.sh /opt/start.sh
 
-EXPOSE 8080 8778
+EXPOSE 8080
 
-CMD [ "/opt/start.sh" ]
+CMD [ "java", "-jar", "jenkins.war" ]
